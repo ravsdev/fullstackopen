@@ -50,7 +50,7 @@ const App = () => {
             }, 3000);
             setPersons(persons.filter((person) => person.id !== id));
           })
-          .catch((error) => {            
+          .catch((error) => {
             setMessage(`${newName} was already deleted from server`);
             setMessageClass(MSG_ERROR)
             setTimeout(() => {
@@ -60,14 +60,24 @@ const App = () => {
           });
       }
     } else {
-      personService.create(personObject).then((data) => {
-        setPersons(persons.concat(data));
-        setMessage(`Added ${data.name}`);
-        setMessageClass(MSG_NOTIFICATION)
-        setTimeout(() => {
-          setMessage(null);
-        }, 3000);
-      });
+      personService
+        .create(personObject)
+        .then((data) => {
+          setPersons(persons.concat(data));
+          setMessage(`Added ${data.name}`);
+          setMessageClass(MSG_NOTIFICATION)
+          setTimeout(() => {
+            setMessage(null);
+          }, 3000);
+        })
+        .catch(error => {
+          setMessage(error.response.data.error);
+          setMessageClass(MSG_ERROR)
+          setTimeout(() => {
+            setMessage(null);
+          }, 3000);
+         // console.log()
+        });
     }
 
     setNewName("");
@@ -116,8 +126,8 @@ const App = () => {
     filterName === ""
       ? persons
       : persons.filter(({ name }) =>
-          name.toLowerCase().includes(filterName.toLowerCase())
-        );
+        name.toLowerCase().includes(filterName.toLowerCase())
+      );
 
   return (
     <div>
