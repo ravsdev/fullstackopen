@@ -1,15 +1,36 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
+const jwt = require('jsonwebtoken')
 
 const api = supertest(app)
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const helper = require('./test_helper')
+const bcrypt = require('bcrypt')
+let token;
 
 beforeEach(async () => {
-  await Blog.deleteMany({})
   await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash(helper.newUser.password, 10)
+
+  const user = new User({
+    username: helper.newUser.username,
+    name: helper.newUser.name,
+    passwordHash,
+  })
+
+  await user.save()
+
+  const userForToken = {
+    username: user.username,
+    id: user._id,
+  }
+
+  token = jwt.sign(userForToken, process.env.SECRET)
+
+  await Blog.deleteMany({})
 
   const blogObjects = helper.initialBlogs
     .map(blog => new Blog(blog))
@@ -33,15 +54,15 @@ describe('blogs api', () => {
 
   test('id is the unique identifier property of the blog posts', async () => {
     const response = await api.get('/api/blogs')
-    for(const blog of response.body){
+    for (const blog of response.body) {
       expect(blog.id).toBeDefined()
     }
   })
 
   test('a valid blog can be added', async () => {
-    
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(helper.newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -52,8 +73,15 @@ describe('blogs api', () => {
 
   })
 
+  test('add blog fails if unauthorized', async () => {
+    await api
+      .post('/api/blogs')
+      .send(helper.newBlog)
+      .expect(401)
+  })
+
   test('if likes property is missing, it will default to 0', async () => {
-    const response =     await api
+    const response = await api
       .post('/api/blogs')
       .send(helper.noLikesBlog)
       .expect(201)

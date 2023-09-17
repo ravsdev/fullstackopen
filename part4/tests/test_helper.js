@@ -16,6 +16,12 @@ const initialBlogs = [
   }
 ]
 
+const newUser = {
+    username: 'test',
+    name: 'Author test',
+    password: 'test'
+}
+
 const newBlog = {
   title: 'New blog',
   author: 'Blog author',
@@ -62,5 +68,6 @@ module.exports = {
   noLikesBlog,
   noTitleBlog,
   noURLBlog,
-  newBlog
+  newBlog,
+  newUser
 }
