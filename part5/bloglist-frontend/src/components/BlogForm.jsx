@@ -1,10 +1,9 @@
-import { useState } from "react";
-import blogService from '../services/blogs';
+import { useState } from 'react'
 
-const BlogForm = ({handleMessage,handleCreateBlog,toggleRef}) => {
-    const [title, setTitle] = useState('');
-    const [author, setAuthor] = useState('');
-    const [url, setUrl] = useState('');
+const BlogForm = ({handleCreateBlog}) => {
+    const [title, setTitle] = useState('')
+    const [author, setAuthor] = useState('')
+    const [url, setUrl] = useState('')
     
     const handleTitleChange = ({ target }) => {
         setTitle(target.value)
@@ -20,18 +19,14 @@ const BlogForm = ({handleMessage,handleCreateBlog,toggleRef}) => {
 
     const handleNewBlog = async (event) =>{
         event.preventDefault()
-        try {
-            const blog = await blogService.create({ title, author, url })
-            handleCreateBlog(blog)
-            setTitle('')
-            setAuthor('')
-            setUrl('')
-            toggleRef.current.toggleVisibility()
-            handleMessage(`a new blog ${title} by ${author} was added`)
-        }
-        catch (exception) {
-            handleMessage('Error creating adding a new blog')
-        }
+        handleCreateBlog({
+            title: title,
+            author: author,
+            url: url
+        })
+        setTitle('')
+        setAuthor('')
+        setUrl('')
     }
 
     return (<div>
@@ -42,6 +37,7 @@ const BlogForm = ({handleMessage,handleCreateBlog,toggleRef}) => {
                     <input
                         type="text"
                         name="title"
+                        placeholder="title"
                         value={title}
                         onChange={handleTitleChange}
                     />
@@ -52,6 +48,7 @@ const BlogForm = ({handleMessage,handleCreateBlog,toggleRef}) => {
                     <input
                         type="text"
                         name="author"
+                        placeholder="author"
                         value={author}
                         onChange={handleAuthorChange}
                     />
@@ -63,12 +60,13 @@ const BlogForm = ({handleMessage,handleCreateBlog,toggleRef}) => {
                         //type="url"
                         type="text"
                         name="url"
+                        placeholder="url"
                         value={url}
                         onChange={handleUrlChange}
                     />
                 </label>
             </div>
-            <input type="submit" value="Create"/>
+            <input id="create-blog" type="submit" value="Create"/>
         </form>
     </div>)
 }

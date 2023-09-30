@@ -1,9 +1,10 @@
-import { useState } from "react"
-import loginService from '../services/login';
+import { useState } from 'react'
+import loginService from '../services/login'
+import PropTypes from 'prop-types'
 
-const Login = ({handleUser, handleMessage }) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+const Login = ({handleLogin }) => {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
 
     const handleUsernameChange = ({ target }) => {
         setUsername(target.value)
@@ -13,9 +14,13 @@ const Login = ({handleUser, handleMessage }) => {
         setPassword(target.value)
     }
 
-    const handleLogin = async (event) => {
+    const handleSubmit = async (event) => {
         //console.log("logging in with", username, password)
         event.preventDefault()
+        setUsername('')
+        setPassword('')
+        handleLogin(username, password)
+        /*
         try {
             const user = await loginService.login({ username, password })
             handleUser(user)
@@ -25,14 +30,14 @@ const Login = ({handleUser, handleMessage }) => {
             window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user)) 
         }
         catch (exception) {
-            handleMessage('wrong username or password')
-        }       
+            handleMessage('wrong username or password','error')
+        }       */
     }
     
     return (
         <div>
             <h2>Log in</h2>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label>Username
                         <input
@@ -57,6 +62,10 @@ const Login = ({handleUser, handleMessage }) => {
             </form>
         </div>
     )
+}
+Login.propTypes = {
+    handleUser: PropTypes.func.isRequired,
+    handleMessage: PropTypes.func
 }
 
 export default Login

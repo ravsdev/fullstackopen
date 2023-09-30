@@ -12,10 +12,6 @@ const Blog = require('../models/blog')
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user',{ username: 1, name:1 })
   response.json(blogs)
-  /*response.json({
-    count: await Blog.count(),
-    blogs: blogs
-  })*/
 })
 
 blogsRouter.get('/:id', async (request, response) => {
@@ -57,30 +53,8 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  const user = request.user
-
-  if(!user) {
-    return response.status(401).json({
-      error: 'token missing or invalid'
-    })
-  }
-
-  //const blog=await Blog.findByIdAndRemove(request.params.id)
-  const blog=await Blog.findById(request.params.id)
-
-  if(!blog) return response.status(404).json({
-    error: 'blog not found'
-  })
-
-  if(blog.user.toString() !== user.id){
-    return response.status(401).json({
-      error: 'invalid user'
-    })
-  }
-
-  await Blog.deleteOne(blog)
+  const blog=await Blog.findByIdAndRemove(request.params.id)
   response.json(blog)
-  
 })
 
 blogsRouter.put('/:id', async (request, response) => {

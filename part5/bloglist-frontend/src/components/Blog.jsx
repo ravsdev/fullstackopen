@@ -1,7 +1,6 @@
-import { useState } from "react"
-import blogService from '../services/blogs'
+import { useState } from 'react'
 
-const Blog = ({ blog, handleLikeButton }) => {
+const Blog = ({ blog, handleLikeButton, user, handleDeleteBlog }) => {
   const [visible, setVisible] = useState(false)
 
   const blogStyle = {
@@ -13,14 +12,15 @@ const Blog = ({ blog, handleLikeButton }) => {
   }
   
   return (
-    <div style={blogStyle}>
-      {blog.title} {blog.author} <button onClick={() => setVisible(!visible)}>{visible?'Hide':'Show'}</button>
+    <div style={blogStyle} className='blog'>
+      <span>{blog.title} {blog.author}</span>
+      <button onClick={() => setVisible(!visible)}>{visible?'Hide':'Show'}</button>
       {visible &&
-        <div>
+        <div className='togglableContent'>
           <div>URL: {blog.url}</div>
-          <div>Likes: {blog.likes} <button onClick={()=>handleLikeButton(blog)}>Like</button></div>
+          <div><span data-like>Likes: {blog.likes}</span> <button like-button='' onClick={()=>handleLikeButton(blog)}>Like</button></div>
           <div>User: {blog.user.name}</div>
-          <button>Remove</button>
+          {user.username === blog.user.username && <button remove-button='' onClick={()=>handleDeleteBlog(blog)}>Remove</button>}
         </div>}
     </div>
   )
