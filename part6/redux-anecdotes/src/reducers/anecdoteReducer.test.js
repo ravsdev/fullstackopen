@@ -11,15 +11,13 @@ describe('anecdoteReducer',()=>{
             }
         ]     
         const action = {
-            type: 'VOTE',
-            payload: {
-                id: 0
-            }
+            type: 'anecdotes/voteAnecdote',
+            payload: 0
         }
         deepFreeze(state)
         const newState = reducer(state, action)
 
-        const id = action.payload.id
+        const id = action.payload
 
         expect(newState.find(anecdote=>anecdote.id === id).votes).toBe(1)
     })

@@ -1,3 +1,6 @@
+import { createSlice } from "@reduxjs/toolkit"
+import anecdoteService from '../services/anecdotes'
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -19,6 +22,58 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState: [],
+  reducers:{
+    updateAnecdote(state, action){
+      const changedAnecdote = action.payload
+      return state.map(anecdote=>anecdote.id !== changedAnecdote.id ? anecdote : changedAnecdote).sort((a,b)=>b.votes-a.votes)     
+    },
+
+    appendAnecdote(state,action){
+      state.push(action.payload)
+    },
+
+    setAnecdotes(state,action){
+      return action.payload.sort((a,b)=>b.votes-a.votes)
+    }
+  }
+})
+
+//TO-DO: remove export
+export const {appendAnecdote, updateAnecdote, setAnecdotes} = anecdoteSlice.actions
+
+export const incializeAnecdotes = ()=>{
+  return async dispatch=>{
+    const anecdotes = await anecdoteService.getAll()
+    dispatch(setAnecdotes(anecdotes))
+  }
+}
+
+export const createAnecdote = (content)=>{
+  return async dispatch =>{
+    const newAnecdote = await anecdoteService.add(content)
+    dispatch(appendAnecdote(newAnecdote))
+  }
+}
+
+//TO-DO
+export const voteAnecdote = (anecdote) =>{
+  return async dispatch =>{
+    const changedAnecdote = {
+      ...anecdote,
+      votes: anecdote.votes+1
+    }
+
+    const updatedAnecdote = await anecdoteService.update(changedAnecdote)
+    dispatch(updateAnecdote(updatedAnecdote))
+  }
+}
+
+export default anecdoteSlice.reducer
+
+/*
 export const voteAnecdote = (id) => {
   return {
     type: 'VOTE',
@@ -39,9 +94,9 @@ export const createAnecdote = (content) => {
   }
 }
 
-const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
+const anecdoteReducer = (state = initialState, action) => {
+  //console.log('state now: ', state)
+  //console.log('action', action)
   switch(action.type){
     case 'VOTE':
       const id = action.payload.id
@@ -60,4 +115,4 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-export default reducer
+export default anecdoteReducer*/
