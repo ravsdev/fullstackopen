@@ -19,5 +19,12 @@ blogSchema.set('toJSON', {
   }
 })
 
+//Populate in middleware to return user name
+blogSchema.post('save', function(doc, next) {
+  doc.populate('user',{ username: 1, name:1 }).then(function() {
+    next();
+  });
+});
+
 const Blog = mongoose.model('Blog', blogSchema)
 module.exports = Blog

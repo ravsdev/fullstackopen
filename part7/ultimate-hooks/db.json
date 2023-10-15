@@ -1,0 +1,28 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are awesome!",
+      "id": 1
+    },
+    {
+      "content": "best feature ever <3",
+      "id": 2
+    },
+    {
+      "content": "testing custom hooks",
+      "id": 3
+    }
+  ],
+  "persons": [
+    {
+      "name": "my name",
+      "number": "00-123-123456789",
+      "id": 1
+    },
+    {
+      "name": "other person",
+      "number": "11-456-987132456",
+      "id": 2
+    }
+  ]
+}
