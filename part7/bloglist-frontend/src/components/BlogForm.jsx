@@ -29,10 +29,9 @@ const BlogForm = () => {
         try {
             const blog = { title, author, url }
             const newBlog = dispatch(createBlog(blog))
-            blogFormRef.current.toggleVisibility()
             dispatch(
                 setNotification(
-                    `a new blog ${newBlog.title} by ${newBlog.author} was added`,
+                    `a new blog ${title} by ${author} was added`,
                     '',
                     5
                 )

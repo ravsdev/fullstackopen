@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import loginService from '../services/login'
-import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
-import { userLogin } from '../reducers/userReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { userLogin } from '../reducers/loginReducer'
 
 const Login = () => {
     const dispatch = useDispatch()

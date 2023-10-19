@@ -1,55 +1,58 @@
-import { useEffect } from 'react'
-
-import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs } from './reducers/blogReducer'
-import { setUser, userLogout } from './reducers/userReducer'
-
 import Blog from './components/Blog'
 import Login from './components/Login'
-import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import Users from './components/Users'
+import User from './components/User'
+import BlogList from './components/BlogList'
+import { useDispatch, useSelector } from 'react-redux'
+import { initializeUser } from './reducers/loginReducer'
+import { useEffect } from 'react'
+import NavMenu from './components/NavMenu'
 
-const App = () => {
-    const dispatch = useDispatch()
-    const blogs = useSelector((state) => state.blog)
+const Root = () => {
     const user = useSelector((state) => state.user)
-
-    useEffect(() => {
-        dispatch(initializeBlogs())
-    }, [])
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const loggedUser = window.localStorage.getItem('loggedBlogappUser')
 
         if (loggedUser) {
             const userJSON = JSON.parse(loggedUser)
-            dispatch(setUser(userJSON))
+            dispatch(initializeUser(userJSON))
         }
     }, [])
 
     return (
         <div>
-            <h2>Blogs</h2>
-            <Notification />
-            {user === null ? (
+            {!user ? (
                 <Login />
             ) : (
-                <div>
-                    <p>
-                        {user.name} logged in{' '}
-                        <button onClick={() => dispatch(userLogout())}>
-                            Log out
-                        </button>
-                    </p>
-                    <BlogForm />
-                    <br />
-                    {blogs.map((blog) => (
-                        <Blog key={blog.id} blog={blog} user={user} />
-                    ))}
-                </div>
+                <>
+                    <NavMenu />
+                    <h1>Blogs</h1>
+                    <Notification />
+                    <Outlet />
+                </>
             )}
         </div>
     )
 }
 
-export default App
+const router = createBrowserRouter([
+    {
+        Component: Root,
+        children: [
+            { path: '/', Component: BlogList },
+            { path: '/users', Component: Users },
+            { path: '/users/:id', Component: User },
+            { path: '/blogs', Component: BlogList },
+            { path: '/blogs/:id', Component: Blog },
+        ],
+    },
+    { path: '*', Component: Root },
+])
+
+export default function App() {
+    return <RouterProvider router={router} />
+}
