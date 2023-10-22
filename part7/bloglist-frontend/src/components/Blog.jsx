@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import { updateBlog, removeBlog } from '../reducers/blogReducer'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import Comment from './Comment'
+import { Button } from 'react-bootstrap'
 
 const Blog = () => {
     const user = useSelector((state) => state.user)
@@ -31,9 +32,16 @@ const Blog = () => {
         }
     }
 
+    const handleLikeBlog = async (blog) => {
+        const updatedBlog = {
+            ...blog,
+            likes: blog.likes + 1,
+        }
+        dispatch(likeBlog(updatedBlog))
+    }
+
     if (!blog) {
-        navigate('/', { replace: true })
-        //return <Navigate to="/" replace={true} />
+        return <Navigate to="/" replace={true} />
     }
 
     return (
@@ -46,19 +54,25 @@ const Blog = () => {
             </div>
             <div>
                 {blog.likes} likes{' '}
-                <button
+                <Button
+                    variant="warning"
                     like-button=""
-                    onClick={() => dispatch(updateBlog(blog))}
+                    onClick={() => handleLikeBlog(blog)}
                 >
                     Like
-                </button>{' '}
+                </Button>{' '}
             </div>
             <div>Added by {blog.user.name ?? blog.user.username}</div>
             {user.username === blog.user.username && (
-                <button remove-button="" onClick={() => handleDeleteBlog(blog)}>
+                <Button
+                    remove-button=""
+                    variant="danger"
+                    onClick={() => handleDeleteBlog(blog)}
+                >
                     Remove
-                </button>
+                </Button>
             )}
+            <Comment blog={blog} />
         </div>
     )
 }

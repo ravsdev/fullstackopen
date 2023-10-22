@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { initializeUser } from './reducers/loginReducer'
 import { useEffect } from 'react'
 import NavMenu from './components/NavMenu'
+import { Container } from 'react-bootstrap'
 
 const Root = () => {
     const user = useSelector((state) => state.user)
@@ -24,18 +25,18 @@ const Root = () => {
     }, [])
 
     return (
-        <div>
+        <Container>
             {!user ? (
                 <Login />
             ) : (
-                <>
+                <Container>
                     <NavMenu />
                     <h1>Blogs</h1>
                     <Notification />
                     <Outlet />
-                </>
+                </Container>
             )}
-        </div>
+        </Container>
     )
 }
 

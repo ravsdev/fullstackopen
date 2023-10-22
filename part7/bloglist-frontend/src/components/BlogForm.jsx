@@ -3,6 +3,7 @@ import Togglable from './Toggable'
 import { useDispatch } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { createBlog } from '../reducers/blogReducer'
+import { Button, Card, Form } from 'react-bootstrap'
 
 const BlogForm = () => {
     const blogFormRef = useRef()
@@ -48,47 +49,57 @@ const BlogForm = () => {
 
     return (
         <Togglable buttonLabel="New Blog" ref={blogFormRef}>
-            <h2>Create new blog</h2>
-            <form onSubmit={handleNewBlog}>
-                <div>
-                    <label>
-                        Title
-                        <input
-                            type="text"
-                            name="title"
-                            placeholder="title"
-                            value={title}
-                            onChange={handleTitleChange}
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Author
-                        <input
-                            type="text"
-                            name="author"
-                            placeholder="author"
-                            value={author}
-                            onChange={handleAuthorChange}
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        URL
-                        <input
-                            //type="url"
-                            type="text"
-                            name="url"
-                            placeholder="url"
-                            value={url}
-                            onChange={handleUrlChange}
-                        />
-                    </label>
-                </div>
-                <input id="create-blog" type="submit" value="Create" />
-            </form>
+            <Card>
+                <Card.Body>
+                    <Card.Title>Create new blog</Card.Title>
+                    <Form onSubmit={handleNewBlog}>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Title</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="title"
+                                placeholder="Blog's title"
+                                value={title}
+                                onChange={handleTitleChange}
+                            />
+                        </Form.Group>
+
+                        <Form.Group
+                            className="mb-3"
+                            controlId="formBasicPassword"
+                        >
+                            <Form.Label>Author</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="author"
+                                placeholder="Blog's author"
+                                value={author}
+                                onChange={handleAuthorChange}
+                            />
+                        </Form.Group>
+                        <Form.Group
+                            className="mb-3"
+                            controlId="formBasicPassword"
+                        >
+                            <Form.Label>URL</Form.Label>
+                            <Form.Control
+                                type="url"
+                                name="url"
+                                placeholder="Blog's URL"
+                                value={url}
+                                onChange={handleUrlChange}
+                            />
+                        </Form.Group>
+                        <Button
+                            variant="success"
+                            id="create-blog"
+                            type="submit"
+                        >
+                            Create
+                        </Button>
+                    </Form>
+                </Card.Body>
+            </Card>
         </Togglable>
     )
 }

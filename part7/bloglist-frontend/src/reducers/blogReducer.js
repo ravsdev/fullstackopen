@@ -50,14 +50,17 @@ export const createBlog = (blog) => {
     }
 }
 
-export const updateBlog = (blog) => {
+export const likeBlog = (blog) => {
     return async (dispatch) => {
-        const updatedBlog = {
-            ...blog,
-            likes: blog.likes + 1,
-        }
-        await blogService.update(blog.id, updatedBlog)
-        dispatch(modBlog(updatedBlog))
+        await blogService.update(blog.id, blog)
+        dispatch(modBlog(blog))
+    }
+}
+
+export const commentBlog = (blog) => {
+    return async (dispatch) => {
+        await blogService.postComment(blog.id, blog)
+        dispatch(modBlog(blog))
     }
 }
 
