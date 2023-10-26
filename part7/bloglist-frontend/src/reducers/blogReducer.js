@@ -59,6 +59,7 @@ export const likeBlog = (blog) => {
 
 export const commentBlog = (blog) => {
     return async (dispatch) => {
+        console.log(blog)
         await blogService.postComment(blog.id, blog)
         dispatch(modBlog(blog))
     }

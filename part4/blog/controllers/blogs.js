@@ -73,9 +73,10 @@ blogsRouter.put('/:id', async (request, response) => {
 
 blogsRouter.post('/:id/comments', async (request, response) => {
   const { body } = request
+  const updateComments = body.comments.filter((comment) => comment !== '')
 
   const blog = {
-    comments: body.comments,
+    comments: updateComments,
   }
 
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {

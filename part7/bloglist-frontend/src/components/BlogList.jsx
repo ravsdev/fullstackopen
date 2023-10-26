@@ -2,36 +2,33 @@ import { useDispatch, useSelector } from 'react-redux'
 import BlogForm from './BlogForm'
 import { useEffect } from 'react'
 import { initializeBlogs } from '../reducers/blogReducer'
-import Blog from './Blog'
 import { Link } from 'react-router-dom'
+import { Container, ListGroup, Row, Stack } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 
 const BlogList = () => {
     const dispatch = useDispatch()
     const blogs = useSelector((state) => state.blog)
-
-    const blogStyle = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        border: 'solid',
-        borderWidth: 1,
-        marginBottom: 5,
-    }
 
     useEffect(() => {
         dispatch(initializeBlogs())
     }, [])
 
     return (
-        <>
+        <Stack gap={3}>
+            <h2>Blog List</h2>
             <BlogForm />
-            <ul style={{ listStyle: 'none' }}>
+            <ListGroup>
                 {blogs.map((blog) => (
-                    <li style={blogStyle} key={blog.id}>
-                        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-                    </li>
+                    <LinkContainer key={blog.id} to={`/blogs/${blog.id}`}>
+                        <ListGroup.Item action>{blog.title}</ListGroup.Item>
+                    </LinkContainer>
+                    // <ListGroup.Item key={blog.id}>
+                    //     <Link to={`/blogs/${blog.id}`}></Link>
+                    // </ListGroup.Item>
                 ))}
-            </ul>
-        </>
+            </ListGroup>
+        </Stack>
     )
 }
 

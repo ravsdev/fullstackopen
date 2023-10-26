@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import { forwardRef, useImperativeHandle, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button } from 'react-bootstrap'
+import { Button, Stack } from 'react-bootstrap'
 
 const Togglable = forwardRef((props, refs) => {
     const [visible, setVisible] = useState(false)
@@ -31,10 +31,12 @@ const Togglable = forwardRef((props, refs) => {
                 </Button>
             </div>
             <div style={showWhenVisible}>
-                {props.children}
-                <Button variant="secondary" onClick={toggleVisibility}>
-                    Cancel
-                </Button>
+                <Stack gap={2} className="col-md-5 mx-auto">
+                    {props.children}
+                    <Button variant="secondary" onClick={toggleVisibility}>
+                        Cancel
+                    </Button>
+                </Stack>
             </div>
         </div>
     )

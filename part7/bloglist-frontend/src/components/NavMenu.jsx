@@ -14,6 +14,7 @@ const NavMenu = () => {
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
+                <Navbar.Brand>Blogs App</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
@@ -24,7 +25,9 @@ const NavMenu = () => {
                             <Nav.Link>Users</Nav.Link>
                         </LinkContainer>
                     </Nav>
-                    <Navbar.Text className="px-3">{`${user.name} logged in`}</Navbar.Text>
+                    <Navbar.Text className="px-3">{`${
+                        user.name ?? user.username
+                    } logged in`}</Navbar.Text>
                     <Button variant="danger" onClick={handleLogout}>
                         Log out
                     </Button>

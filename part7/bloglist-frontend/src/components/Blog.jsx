@@ -3,7 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import Comment from './Comment'
-import { Button } from 'react-bootstrap'
+import {
+    Button,
+    Container,
+    ListGroup,
+    ListGroupItem,
+    Stack,
+} from 'react-bootstrap'
 
 const Blog = () => {
     const user = useSelector((state) => state.user)
@@ -45,7 +51,7 @@ const Blog = () => {
     }
 
     return (
-        <div>
+        <Container>
             <h2>
                 {blog.title} - {blog.author}
             </h2>
@@ -73,7 +79,12 @@ const Blog = () => {
                 </Button>
             )}
             <Comment blog={blog} />
-        </div>
+            <ListGroup>
+                {blog.comments.map((comment) => (
+                    <ListGroupItem>{comment}</ListGroupItem>
+                ))}
+            </ListGroup>
+        </Container>
     )
 }
 

@@ -31,7 +31,6 @@ const Root = () => {
             ) : (
                 <Container>
                     <NavMenu />
-                    <h1>Blogs</h1>
                     <Notification />
                     <Outlet />
                 </Container>

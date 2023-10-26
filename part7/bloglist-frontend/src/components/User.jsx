@@ -1,4 +1,6 @@
+import { Badge, Card, ListGroup, Stack } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
+import { LinkContainer } from 'react-router-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 
 const User = () => {
@@ -7,19 +9,22 @@ const User = () => {
     const user = users.find((user) => user.id === id)
 
     if (!user) return null
-    console.log(user.blogs)
+
     return (
-        <div>
-            <h2>{user.name}</h2>
-            <h3>Added blogs:</h3>
-            <ul>
-                {user.blogs.map((blog) => (
-                    <li key={blog.id}>
-                        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <Stack gap={3}>
+            <h2>{user.name ?? user.username}</h2>
+            <ListGroup>
+                {user.blogs.length === 0
+                    ? 'No blogs'
+                    : user.blogs.map((blog) => (
+                          <LinkContainer key={blog.id} to={`/blogs/${blog.id}`}>
+                              <ListGroup.Item action>
+                                  {blog.title}
+                              </ListGroup.Item>
+                          </LinkContainer>
+                      ))}
+            </ListGroup>
+        </Stack>
     )
 }
 
